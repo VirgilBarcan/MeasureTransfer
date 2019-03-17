@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
     {
         std::string host = "localhost";
         Protocol protocol = Protocol::kTcp;
-        CommunicationMechanism communication_mechanism = CommunicationMechanism::kStopAndGo;
+        CommunicationMechanism communication_mechanism = CommunicationMechanism::kStreaming;
         uint32_t no_of_messages = 10;
         uint32_t message_size = 4;
 
