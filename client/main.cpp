@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
         Protocol protocol = Protocol::kTcp;
         CommunicationMechanism communication_mechanism = CommunicationMechanism::kStreaming;
         uint32_t no_of_messages = 10;
-        uint32_t message_size = 4;
+        uint32_t message_size = 1024;
 
         if (argc == 6)
         {

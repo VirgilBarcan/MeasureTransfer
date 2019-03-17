@@ -198,7 +198,7 @@ class TcpStreamingCommunicator : public Communicator
 public:
     TcpStreamingCommunicator(std::size_t message_size, uint16_t client_id)
         : protocol_{Protocol::kTcp}
-        , communication_mechanism_{CommunicationMechanism::kStopAndGo}
+        , communication_mechanism_{CommunicationMechanism::kStreaming}
         , message_size_{message_size}
         , io_service_{}
         , acceptor_{io_service_, tcp::endpoint(tcp::v4(), client_id)}
