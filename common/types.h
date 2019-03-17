@@ -22,4 +22,40 @@ enum class CommunicationMechanism : int8_t
     kStopAndGo = 1
 };
 
+std::ostream& operator<<(std::ostream& os, const Protocol& protocol)
+{
+    if (protocol == Protocol::kTcp)
+    {
+        os << "TCP";
+        return os;
+    }
+
+    if (protocol == Protocol::kUdp)
+    {
+        os << "UDP";
+        return os;
+    }
+
+    os << "Unknown Protocol";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const CommunicationMechanism& communication_mechanism)
+{
+    if (communication_mechanism == CommunicationMechanism::kStreaming)
+    {
+        os << "Streaming";
+        return os;
+    }
+
+    if (communication_mechanism == CommunicationMechanism::kStopAndGo)
+    {
+        os << "StopAndGo";
+        return os;
+    }
+
+    os << "Unknown CommunicationMechanism";
+    return os;
+}
+
 #endif //MEASURE_TRANSFER_TYPES_H

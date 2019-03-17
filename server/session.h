@@ -29,32 +29,41 @@ public:
 
     ~Session()
     {
-
-        communicator_->Stop();
+        // print the stats
+        auto stats = communicator_->GetStats();
+        std::cout << "Protocol: " << stats.protocol << std::endl;
+        std::cout << "Communication mechanism: " << stats.communication_mechanism << std::endl;
+        std::cout << "# read messages: " << stats.no_of_read_messages << std::endl;
+        std::cout << "# read bytes: " << stats.no_of_read_bytes << std::endl;
     }
 
     void Start()
     {
         std::cout << "Session " << client_id_ << " started" << std::endl;
 
-        // wait hello message from the client
-        auto error = HandleHello();
-
-        if (error)
+        do
         {
-            std::cout << "Session::Start hello error: " << error << std::endl;
-            return;
-        }
+            // wait hello message from the client
+            auto error = HandleHello();
 
-        // wait goodbye message from the client
-        error = HandleGoodbye();
+            if (error)
+            {
+                std::cout << "Session::Start hello error: " << error << std::endl;
+                break;
+            }
 
-        if (error)
-        {
-            std::cout << "Session::Start goodbye error: " << error << std::endl;
-            return;
-        }
+            // wait goodbye message from the client
+            error = HandleGoodbye();
 
+            if (error)
+            {
+                std::cout << "Session::Start goodbye error: " << error << std::endl;
+                break;
+            }
+        } while (false);
+
+        // end the session
+        communicator_->Stop();
         std::cout << "Session " << client_id_ << " finished" << std::endl;
     }
 
@@ -95,8 +104,8 @@ private:
         HelloMessage hello_message = HelloMessage::Decode(buffer);
 
         // build communicator
-        communicator_ = boost::make_shared<Communicator>(hello_message.protocol, hello_message.communication_mechanism, hello_message.message_size, client_id_);
-        boost::thread communication_thread(boost::bind(&Communicator::Run, communicator_));
+        communicator_ = CommunicatorFactory(hello_message.protocol, hello_message.communication_mechanism, hello_message.message_size, client_id_);
+        boost::thread communication_thread(boost::bind(&Communicator::Start, communicator_));
         communication_thread.detach();
 
         // send response
@@ -140,7 +149,7 @@ private:
 private:
     uint16_t client_id_;
     tcp::socket socket_;
-    boost::shared_ptr<Communicator> communicator_;
+    std::shared_ptr<Communicator> communicator_;
 };
 
 #endif //MEASURE_TRANSFER_SESSION_H

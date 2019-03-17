@@ -18,6 +18,6 @@ if(Boost_FOUND)
     target_link_libraries(Server ${Boost_LIBRARIES})
 
     # Make the Client
-    add_executable(Client client/main.cpp common/messages.h common/types.h common/utils.h)
+    add_executable(Client client/main.cpp common/messages.h common/types.h common/utils.h client/client.h)
     target_link_libraries(Client ${Boost_LIBRARIES} pthread)
 endif()

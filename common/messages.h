@@ -137,6 +137,11 @@ struct DataMessage
         return buffer;
     }
 
+    std::size_t Size() const
+    {
+        return kSize + data.size();
+    }
+
     // data members
     uint32_t message_no;
     std::vector<uint8_t> data;
